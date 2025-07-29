@@ -3,7 +3,7 @@
  * Plugin Name: Combo Offers WooCommerce
  * Plugin URI: https://quanticedgesolutions.com/?utm-source=free-plugin&utm-medium=wooextend
  * Description: Combo Offers Woocommerce enables administrator to offer combo deals on their product!
- * Version: 3.3
+ * Version: 4.0
  * Author: QuanticEdge
  * Author URI: https://quanticedgesolutions.com/?utm-source=free-plugin&utm-medium=wooextend
  * Text Domain: woo-combo-offers
@@ -15,19 +15,19 @@
 
 defined( 'ABSPATH' ) || exit;
 
-! defined( 'WOOCO_VERSION' ) && define( 'WOOCO_VERSION', '3.3' );
+! defined( 'WOOCO_VERSION' ) && define( 'WOOCO_VERSION', '4.0' );
 ! defined( 'WOOCO_URI' ) && define( 'WOOCO_URI', plugin_dir_url( __FILE__ ) );
 ! defined( 'WOOCO_REVIEWS' ) && define( 'WOOCO_REVIEWS', 'https://wordpress.org/support/plugin/woo-combo-offers/reviews/?filter=5' );
 ! defined( 'WOOCO_CHANGELOG' ) && define( 'WOOCO_CHANGELOG', 'https://wordpress.org/plugins/woo-combo-offers/#developers' );
 ! defined( 'WOOCO_DISCUSSION' ) && define( 'WOOCO_DISCUSSION', 'https://wordpress.org/support/plugin/woo-combo-offers' );
 
 if ( ! function_exists( 'wooco_init' ) ) {
-	add_action( 'plugins_loaded', 'wooco_init', 11 );
+	add_action( 'plugins_loaded', 'wooco_init' );
 
 	function wooco_init() {
 		// load text-domain
 		load_plugin_textdomain( 'woo-combo-offers', false, basename( __DIR__ ) . '/languages/' );
-
+		
 		if ( ! function_exists( 'WC' ) || ! version_compare( WC()->version, '3.0.0', '>=' ) ) {
 			add_action( 'admin_notices', 'wooco_notice_wc' );
 
@@ -1232,9 +1232,10 @@ if ( ! function_exists( 'wooco_init' ) ) {
 					$ids         = $this->wooco_clean_ids( $_POST['ids'] );
 					$exclude_ids = array();
 					$ids_arrs    = explode( ',', $ids );
+					$check_product = apply_filters('wooco_product_active', false);
 
-					if ( is_array( $ids_arrs ) && count( $ids_arrs ) > 2 ) {
-						esc_html('<ul><span>Please use the Premium Version to add more than 3 products to the combo. Click <a href="https://www.wooextend.com/product/woocommerce-combo-offers-pro/" target="_blank">here</a> to buy, just <del>$30</del> $25!</span></ul>');
+					if ( is_array( $ids_arrs ) && count( $ids_arrs ) > 2 && !$check_product ) {
+						echo __('<ul><span>Please use the Premium Version to add more than 3 products to the combo. Click <a href="https://www.wooextend.com/product/woocommerce-combo-offers-pro/" target="_blank">here</a> to buy, just <del>$30</del> $25!</span></ul>');
 						die();
 					}
 
@@ -1825,6 +1826,7 @@ if ( ! function_exists( 'wooco_init' ) ) {
 							echo '<div class="wooco_before_text wooco-before-text wooco-text">' . do_shortcode( esc_html( $wooco_before_text ) ) . '</div>';
 						}
 						do_action( 'wooco_before_table', $product );
+						$check_product = apply_filters('wooco_product_active', false);
 						?>
                         <div class="wooco_products wooco-table wooco-products"
                              data-discount="<?php echo $product->get_discount(); ?>"
@@ -1835,7 +1837,7 @@ if ( ! function_exists( 'wooco_init' ) ) {
                              data-max="<?php echo esc_attr( get_post_meta( $product_id, 'wooco_limit_whole_max', true ) ?: '' ); ?>">
 							<?php foreach ( $wooco_items as $wooco_item ) {
 								$wooco_product = wc_get_product( $wooco_item['id'] );
-								if ( ! $wooco_product || ( $count > 2 ) ) {
+								if ( ! $wooco_product || ( $count > 2 && !$check_product ) ) {
 									continue;
 								}
 

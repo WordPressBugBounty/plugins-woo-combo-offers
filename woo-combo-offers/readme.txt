@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/vidish
 Tags: woocommerce, woo, combo products, combo offer, combo, product, bundle, bundles, product bundle, product bundles
 Requires at least: 4.0
 Tested up to: 6.5
-Stable tag: 3.3
+Stable tag: 4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,9 @@ You can purchase our Premium version to get this feature..
 5. Done! click Save and Go to front end
 
 == Changelog ==
+
+= 4.0 =
+* Compatible with new premium version
 
 = 3.3 =
 * Fix for elementor
