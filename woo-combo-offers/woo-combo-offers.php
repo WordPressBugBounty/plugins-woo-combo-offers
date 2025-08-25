@@ -3,19 +3,19 @@
  * Plugin Name: Combo Offers WooCommerce
  * Plugin URI: https://quanticedgesolutions.com/?utm-source=free-plugin&utm-medium=wooextend
  * Description: Combo Offers Woocommerce enables administrator to offer combo deals on their product!
- * Version: 4.0
+ * Version: 4.1
  * Author: QuanticEdge
  * Author URI: https://quanticedgesolutions.com/?utm-source=free-plugin&utm-medium=wooextend
  * Text Domain: woo-combo-offers
  * Domain Path: /languages/
  * WC requires at least: 3.0
- * Tested up to: 6.5
+ * Tested up to: 6.8.2
  * WC tested up to: 8.4.2
 */
 
 defined( 'ABSPATH' ) || exit;
 
-! defined( 'WOOCO_VERSION' ) && define( 'WOOCO_VERSION', '4.0' );
+! defined( 'WOOCO_VERSION' ) && define( 'WOOCO_VERSION', '4.1' );
 ! defined( 'WOOCO_URI' ) && define( 'WOOCO_URI', plugin_dir_url( __FILE__ ) );
 ! defined( 'WOOCO_REVIEWS' ) && define( 'WOOCO_REVIEWS', 'https://wordpress.org/support/plugin/woo-combo-offers/reviews/?filter=5' );
 ! defined( 'WOOCO_CHANGELOG' ) && define( 'WOOCO_CHANGELOG', 'https://wordpress.org/plugins/woo-combo-offers/#developers' );
@@ -96,7 +96,9 @@ if ( ! function_exists( 'wooco_init' ) ) {
 							if ( ! $wooco_product || $wooco_product->is_type( 'wooco' ) || ( $wooco_product->get_stock_quantity() === null ) ) {
 								continue;
 							}
-							$available_qty[] = floor( $wooco_product->get_stock_quantity() / $wooco_item['qty'] );
+							if (!empty($wooco_item['qty']) && $wooco_item['qty'] > 0) {
+								$available_qty[] = floor( $wooco_product->get_stock_quantity() / $wooco_item['qty'] );
+							}
 						}
 						if ( count( $available_qty ) > 0 ) {
 							sort( $available_qty );
@@ -958,7 +960,7 @@ if ( ! function_exists( 'wooco_init' ) ) {
 				}
 
 				function wooco_add_to_cart( $cart_item_key, $product_id, $quantity, $variation_id, $variation, $cart_item_data ) {
-					if ( ! empty( $cart_item_data['wooco_ids'] ) && method_exists( WC()->cart->cart_contents[ $cart_item_key ]['data'], 'is_fixed_price' ) && method_exists( WC()->cart->cart_contents[ $cart_item_key ]['data'], 'get_discount' ) ) {
+					if ( ! empty( $cart_item_data['wooco_ids'] ) && !is_null(WC()->cart->cart_contents[ $cart_item_key ]['data']) && method_exists( WC()->cart->cart_contents[ $cart_item_key ]['data'], 'is_fixed_price' ) && method_exists( WC()->cart->cart_contents[ $cart_item_key ]['data'], 'get_discount' ) ) {
 						$wooco_fixed_price  = WC()->cart->cart_contents[ $cart_item_key ]['data']->is_fixed_price();
 						$wooco_get_discount = WC()->cart->cart_contents[ $cart_item_key ]['data']->get_discount();
 

@@ -3,7 +3,7 @@ Contributors: vidishp, quanticedge
 Donate link: https://ko-fi.com/vidish
 Tags: woocommerce, woo, combo products, combo offer, combo, product, bundle, bundles, product bundle, product bundles
 Requires at least: 4.0
-Tested up to: 6.5
+Tested up to: 6.8.2
 Stable tag: 4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -42,6 +42,7 @@ Thank you for <a href="https://www.facebook.com/wooextend/reviews">LOVING our cr
 <strong>More plugins by WooExtend:</strong>
 <ul>
 <li><strong><a href="https://wordpress.org/plugins/woo-bulk-order/">Woocommerce Bulk Order</a></strong></li>
+<li><strong><a href="https://wordpress.org/plugins/build-your-own-basket-for-woocommerce">Build Your Own Basket for Woocommerce</a></strong></li>
 <li><strong><a href="https://wordpress.org/plugins/woo-product-category-discount/">Woo Product Category Discount</a></strong></li>
 <li><strong><a href="https://wordpress.org/plugins/first-order-discount-woocommerce/">First Order Discount</a></strong></li>
 <li><strong><a href="https://wordpress.org/plugins/woo-custom-fee/">Custom Fee</a></strong></li>
@@ -89,6 +90,10 @@ You can purchase our Premium version to get this feature..
 5. Done! click Save and Go to front end
 
 == Changelog ==
+
+= 4.1 =
+* Fixed divide by 0 error in some rare scenario
+* Added a check for not null cart
 
 = 4.0 =
 * Compatible with new premium version
