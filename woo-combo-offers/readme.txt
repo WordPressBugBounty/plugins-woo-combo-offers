@@ -43,7 +43,7 @@ Thank you for <a href="https://www.facebook.com/wooextend/reviews">LOVING our cr
 <ul>
 <li><strong><a href="https://wordpress.org/plugins/woo-bulk-order/">Woocommerce Bulk Order</a></strong></li>
 <li><strong><a href="https://wordpress.org/plugins/build-your-own-basket-for-woocommerce">Build Your Own Basket for Woocommerce</a></strong></li>
-<li><strong><a href="https://wordpress.org/plugins/woo-product-category-discount/">Woo Product Category Discount</a></strong></li>
+<li><strong><a href="https://wordpress.org/plugins/woo-product-category-discount/">Simple Discount Rules for Woocommerce</a></strong></li>
 <li><strong><a href="https://wordpress.org/plugins/first-order-discount-woocommerce/">First Order Discount</a></strong></li>
 <li><strong><a href="https://wordpress.org/plugins/woo-custom-fee/">Custom Fee</a></strong></li>
 </ul>
@@ -90,6 +90,9 @@ You can purchase our Premium version to get this feature..
 5. Done! click Save and Go to front end
 
 == Changelog ==
+
+= 4.2 =
+* Fix issue when one of the child item is out of stock, whole item is not purchaseable.
 
 = 4.1 =
 * Fixed divide by 0 error in some rare scenario

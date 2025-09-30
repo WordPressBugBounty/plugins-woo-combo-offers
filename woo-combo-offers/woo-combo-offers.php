@@ -3,7 +3,7 @@
  * Plugin Name: Combo Offers WooCommerce
  * Plugin URI: https://quanticedgesolutions.com/?utm-source=free-plugin&utm-medium=wooextend
  * Description: Combo Offers Woocommerce enables administrator to offer combo deals on their product!
- * Version: 4.1
+ * Version: 4.2
  * Author: QuanticEdge
  * Author URI: https://quanticedgesolutions.com/?utm-source=free-plugin&utm-medium=wooextend
  * Text Domain: woo-combo-offers
@@ -15,7 +15,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-! defined( 'WOOCO_VERSION' ) && define( 'WOOCO_VERSION', '4.1' );
+! defined( 'WOOCO_VERSION' ) && define( 'WOOCO_VERSION', '4.2' );
 ! defined( 'WOOCO_URI' ) && define( 'WOOCO_URI', plugin_dir_url( __FILE__ ) );
 ! defined( 'WOOCO_REVIEWS' ) && define( 'WOOCO_REVIEWS', 'https://wordpress.org/support/plugin/woo-combo-offers/reviews/?filter=5' );
 ! defined( 'WOOCO_CHANGELOG' ) && define( 'WOOCO_CHANGELOG', 'https://wordpress.org/plugins/woo-combo-offers/#developers' );
@@ -662,12 +662,12 @@ if ( ! function_exists( 'wooco_init' ) ) {
 							$wooco_product   = wc_get_product( $wooco_item_id );
 							if(!is_bool($wooco_product) && ($wooco_product->get_type() == 'simple' || $wooco_product->get_type() == 'variation')) {
 								if(!$wooco_product->is_in_stock()) {
-									return false;
+									return true;
 								}
 							}
 							if(!is_bool($wooco_product) && $wooco_product->get_type() == 'variable') {
 								if(count($wooco_product->get_available_variations()) == 0) {
-									return false;
+									return true;
 								}
 							}
 						}
@@ -919,7 +919,7 @@ if ( ! function_exists( 'wooco_init' ) ) {
 								$wooco_item_id   = absint( $wooco_item_data[0] ?: 0 );
 								$wooco_product   = wc_get_product( $wooco_item_id );
 
-								if ( ! $wooco_product || ! $wooco_product->is_in_stock() || ! $wooco_product->is_purchasable() ) {
+								if ( ! $wooco_product || ! $wooco_product->is_purchasable() ) {
 									$passed = false;
 									wc_add_notice( esc_html__( 'Have an error when adding this combo to the cart.', 'woo-combo-offers' ), 'error' );
 								}
@@ -1308,18 +1308,18 @@ if ( ! function_exists( 'wooco_init' ) ) {
 						$wooco_product = wc_get_product( $post_id );
 						if ( $wooco_product && ! $wooco_product->is_type( 'wooco' ) ) {
 							?>
-                            <p><?php esc_html_e( 'Update price for all combos contains this product. The progress time based on the number of your combos.', 'woo-combo-offers' ); ?></p>
-                            <input id="wooco_meta_box_update_price" type="button" class="button"
-                                   data-id="<?php echo esc_attr( $post_id ); ?>"
-                                   value="<?php esc_html_e( 'Update Price', 'woo-combo-offers' ); ?>"/>
-                            <ul id="wooco_meta_box_update_price_result"></ul>
-							<?php
+<p><?php esc_html_e( 'Update price for all combos contains this product. The progress time based on the number of your combos.', 'woo-combo-offers' ); ?>
+</p>
+<input id="wooco_meta_box_update_price" type="button" class="button" data-id="<?php echo esc_attr( $post_id ); ?>"
+    value="<?php esc_html_e( 'Update Price', 'woo-combo-offers' ); ?>" />
+<ul id="wooco_meta_box_update_price_result"></ul>
+<?php
 						} else { ?>
-                            <p><?php esc_html_e( 'Invalid product to use this tool!', 'woo-combo-offers' ); ?></p>
-						<?php }
+<p><?php esc_html_e( 'Invalid product to use this tool!', 'woo-combo-offers' ); ?></p>
+<?php }
 					} else { ?>
-                        <p><?php esc_html_e( 'This box content just appears after you publish the product.', 'woo-combo-offers' ); ?></p>
-					<?php }
+<p><?php esc_html_e( 'This box content just appears after you publish the product.', 'woo-combo-offers' ); ?></p>
+<?php }
 				}
 
 				function wooco_search_sku( $query ) {
@@ -1400,35 +1400,36 @@ if ( ! function_exists( 'wooco_init' ) ) {
 					global $post;
 					$post_id = $post->ID;
 					?>
-                    <div id='wooco_settings' class='panel woocommerce_options_panel wooco_table'>
-                        <table>
-                        	<tr><th colspan="2" style="padding-bottom:10px;">
-                        		<strong><?php 
+<div id='wooco_settings' class='panel woocommerce_options_panel wooco_table'>
+    <table>
+        <tr>
+            <th colspan="2" style="padding-bottom:10px;">
+                <strong><?php 
                         		echo sprintf( esc_html__( 'If you like Combo Offers please leave us a %s rating. A huge thanks in advance!', 'woo-combo-offers' ), '<a href="https://wordpress.org/support/plugin/woo-combo-offers/reviews?rate=5#new-post" target="_blank" class="wc-rating-link" aria-label="five star" data-rated="Thanks :)">★★★★★</a>' ); ?></strong>
-                        	</th></tr>
-                            <tr>
-                                <th><?php esc_html_e( 'Select product', 'woo-combo-offers' ); ?>
-                                </th>
-                                <td>
-                                    <div class="w100">
-								<span class="loading"
-                                      id="wooco_loading"><?php esc_html_e( 'searching...', 'woo-combo-offers' ); ?></span>
-                                        <input type="search" id="wooco_keyword"
-                                               placeholder="<?php esc_html_e( 'Type any keyword to search', 'woo-combo-offers' ); ?>"/>
-                                        <div id="wooco_results" class="wooco_results"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="wooco_tr_space">
-                                <th><?php esc_html_e( 'Selected', 'woo-combo-offers' ); ?></th>
-                                <td>
-                                    <div class="w100">
-                                        <input type="hidden" id="wooco_ids" class="wooco_ids" name="wooco_ids"
-                                               value="<?php echo esc_attr(get_post_meta( $post_id, 'wooco_ids', true )); ?>"
-                                               readonly/>
-                                        <div id="wooco_selected" class="wooco_selected">
-                                            <ul>
-												<?php
+            </th>
+        </tr>
+        <tr>
+            <th><?php esc_html_e( 'Select product', 'woo-combo-offers' ); ?>
+            </th>
+            <td>
+                <div class="w100">
+                    <span class="loading"
+                        id="wooco_loading"><?php esc_html_e( 'searching...', 'woo-combo-offers' ); ?></span>
+                    <input type="search" id="wooco_keyword"
+                        placeholder="<?php esc_html_e( 'Type any keyword to search', 'woo-combo-offers' ); ?>" />
+                    <div id="wooco_results" class="wooco_results"></div>
+                </div>
+            </td>
+        </tr>
+        <tr class="wooco_tr_space">
+            <th><?php esc_html_e( 'Selected', 'woo-combo-offers' ); ?></th>
+            <td>
+                <div class="w100">
+                    <input type="hidden" id="wooco_ids" class="wooco_ids" name="wooco_ids"
+                        value="<?php echo esc_attr(get_post_meta( $post_id, 'wooco_ids', true )); ?>" readonly />
+                    <div id="wooco_selected" class="wooco_selected">
+                        <ul>
+                            <?php
 												if ( get_post_meta( $post_id, 'wooco_ids', true ) ) {
 													$wooco_items = explode( ',', get_post_meta( $post_id, 'wooco_ids', true ) );
 													if ( is_array( $wooco_items ) && count( $wooco_items ) > 0 ) {
@@ -1445,29 +1446,32 @@ if ( ! function_exists( 'wooco_init' ) ) {
 													}
 												}
 												?>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="wooco_tr_space">
-                                <th><?php echo esc_html__( 'Regular price', 'woo-combo-offers' ) . ' (' . get_woocommerce_currency_symbol() . ')'; ?></th>
-                                <td>
-                                    <span id="wooco_regular_price"></span>
-                                </td>
-                            </tr>
-                            <tr class="wooco_tr_space">
-                                <th><?php esc_html_e( 'Auto price', 'woo-combo-offers' ); ?></th>
-                                <td>
-                                    <input id="wooco_disable_auto_price" name="wooco_disable_auto_price"
-                                           type="checkbox" <?php echo( get_post_meta( $post_id, 'wooco_disable_auto_price', true ) === 'on' ? 'checked' : '' ); ?>/>
-                                    <label for="wooco_disable_auto_price"></label><?php esc_html_e( 'Disable auto calculate price?', 'woo-combo-offers' ); ?> <?php echo sprintf( esc_html__( 'If yes, %s click here to set price %s by manually.', 'woo-combo-offers' ), '<a id="wooco_set_regular_price">', '</a>' ); ?>
-                                </td>
-                            </tr>
-                            <tr class="wooco_tr_space wooco_tr_show_if_auto_price">
-                                <th><?php esc_html_e( 'Discount', 'woo-combo-offers' ); ?></th>
-                                <td style="vertical-align: middle; line-height: 30px; font-style: italic">
-									<?php
+                        </ul>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr class="wooco_tr_space">
+            <th><?php echo esc_html__( 'Regular price', 'woo-combo-offers' ) . ' (' . get_woocommerce_currency_symbol() . ')'; ?>
+            </th>
+            <td>
+                <span id="wooco_regular_price"></span>
+            </td>
+        </tr>
+        <tr class="wooco_tr_space">
+            <th><?php esc_html_e( 'Auto price', 'woo-combo-offers' ); ?></th>
+            <td>
+                <input id="wooco_disable_auto_price" name="wooco_disable_auto_price" type="checkbox"
+                    <?php echo( get_post_meta( $post_id, 'wooco_disable_auto_price', true ) === 'on' ? 'checked' : '' ); ?> />
+                <label
+                    for="wooco_disable_auto_price"></label><?php esc_html_e( 'Disable auto calculate price?', 'woo-combo-offers' ); ?>
+                <?php echo sprintf( esc_html__( 'If yes, %s click here to set price %s by manually.', 'woo-combo-offers' ), '<a id="wooco_set_regular_price">', '</a>' ); ?>
+            </td>
+        </tr>
+        <tr class="wooco_tr_space wooco_tr_show_if_auto_price">
+            <th><?php esc_html_e( 'Discount', 'woo-combo-offers' ); ?></th>
+            <td style="vertical-align: middle; line-height: 30px; font-style: italic">
+                <?php
 									// only for old version has wooco_price_percent
 									$wooco_discount = 0;
 									if ( get_post_meta( $post_id, 'wooco_discount', true ) ) {
@@ -1476,87 +1480,86 @@ if ( ! function_exists( 'wooco_init' ) ) {
 										$wooco_discount = 100 - get_post_meta( $post_id, 'wooco_price_percent', true );
 									}
 									?>
-                                    <input id="wooco_discount" name="wooco_discount" type="number"
-                                           min="0" step="0.0001"
-                                           max="99.9999"
-                                           value="<?php echo esc_attr( $wooco_discount ); ?>"
-                                           style="width: 60px"/>%
-                                </td>
-                            </tr>
-                            <tr class="wooco_tr_space">
-                                <th><?php esc_html_e( 'Optional products', 'woo-combo-offers' ); ?></th>
-                                <td>
-                                    <input id="wooco_optional_products" name="wooco_optional_products"
-                                           type="checkbox" <?php echo( get_post_meta( $post_id, 'wooco_optional_products', true ) === 'on' ? 'checked' : '' ); ?>/>
-                                    <label for="wooco_optional_products"></label><?php esc_html_e( 'Buyer can change the quantity of combo products?', 'woo-combo-offers' ); ?>
-                                </td>
-                            </tr>
-                            <tr class="wooco_tr_space wooco_tr_show_if_optional_products">
-                                <th><?php esc_html_e( 'Limit of each item', 'woo-combo-offers' ); ?></th>
-                                <td>
-                                    Min <input name="wooco_limit_each_min" type="number"
-                                               min="0"
-                                               value="<?php echo( get_post_meta( $post_id, 'wooco_limit_each_min', true ) ?: '' ); ?>"
-                                               style="width: 60px; float: none"/> Max <input name="wooco_limit_each_max"
-                                                                                             type="number" min="1"
-                                                                                             value="<?php echo esc_attr( get_post_meta( $post_id, 'wooco_limit_each_max', true ) ?: '' ); ?>"
-                                                                                             style="width: 60px; float: none"/>
-                                    <input id="wooco_limit_each_min_default" name="wooco_limit_each_min_default"
-                                           type="checkbox" <?php echo esc_attr( get_post_meta( $post_id, 'wooco_limit_each_min_default', true ) === 'on' ? 'checked' : '' ); ?>/>
-                                    <label for="wooco_limit_each_min_default"></label><?php esc_html_e( 'Use default quantity as min?', 'woo-combo-offers' ); ?>
-                                </td>
-                            </tr>
-                            <tr class="wooco_tr_space wooco_tr_show_if_optional_products">
-                                <th><?php esc_html_e( 'Limit of whole items', 'woo-combo-offers' ); ?></th>
-                                <td>
-                                    Min <input name="wooco_limit_whole_min" type="number"
-                                               min="1"
-                                               value="<?php echo esc_attr( get_post_meta( $post_id, 'wooco_limit_whole_min', true ) ?: '' ); ?>"
-                                               style="width: 60px; float: none"/> Max <input
-                                            name="wooco_limit_whole_max"
-                                            type="number" min="1"
-                                            value="<?php echo esc_attr( get_post_meta( $post_id, 'wooco_limit_whole_max', true ) ?: '' ); ?>"
-                                            style="width: 60px; float: none"/>
-                                </td>
-                            </tr>
-                            <tr class="wooco_tr_space">
-                                <th><?php esc_html_e( 'Shipping fee', 'woo-combo-offers' ); ?></th>
-                                <td style="font-style: italic">
-                                    <select id="wooco_shipping_fee" name="wooco_shipping_fee">
-                                        <option value="whole" <?php echo esc_attr( get_post_meta( $post_id, 'wooco_shipping_fee', true ) === 'whole' ? 'selected' : '' ); ?>><?php esc_html_e( 'Apply to the whole combo', 'woo-combo-offers' ); ?></option>
-                                        <option value="each" <?php echo esc_attr( get_post_meta( $post_id, 'wooco_shipping_fee', true ) === 'each' ? 'selected' : '' ); ?>><?php esc_html_e( 'Apply to each combo product', 'woo-combo-offers' ); ?></option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr class="wooco_tr_space">
-                                <th><?php esc_html_e( 'Manage stock', 'woo-combo-offers' ); ?></th>
-                                <td>
-                                    <input id="wooco_manage_stock" name="wooco_manage_stock"
-                                           type="checkbox" <?php echo esc_attr( get_post_meta( $post_id, 'wooco_manage_stock', true ) === 'on' ? 'checked' : '' ); ?>/>
-                                    <label for="wooco_manage_stock"></label><?php esc_html_e( 'Enable stock management at combo level?', 'woo-combo-offers' ); ?>
-                                </td>
-                            </tr>
-                            <tr class="wooco_tr_space">
-                                <th><?php esc_html_e( 'Before text', 'woo-combo-offers' ); ?></th>
-                                <td>
-                                    <div class="w100">
-								<textarea name="wooco_before_text"
-                                          placeholder="<?php esc_html_e( 'The text before combo products', 'woo-combo-offers' ); ?>"><?php echo esc_attr( get_post_meta( $post_id, 'wooco_before_text', true ) ); ?></textarea>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="wooco_tr_space">
-                                <th><?php esc_html_e( 'After text', 'woo-combo-offers' ); ?></th>
-                                <td>
-                                    <div class="w100">
-								<textarea name="wooco_after_text"
-                                          placeholder="<?php esc_html_e( 'The text after combo products', 'woo-combo-offers' ); ?>"><?php echo esc_attr( get_post_meta( $post_id, 'wooco_after_text', true ) ); ?></textarea>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-					<?php
+                <input id="wooco_discount" name="wooco_discount" type="number" min="0" step="0.0001" max="99.9999"
+                    value="<?php echo esc_attr( $wooco_discount ); ?>" style="width: 60px" />%
+            </td>
+        </tr>
+        <tr class="wooco_tr_space">
+            <th><?php esc_html_e( 'Optional products', 'woo-combo-offers' ); ?></th>
+            <td>
+                <input id="wooco_optional_products" name="wooco_optional_products" type="checkbox"
+                    <?php echo( get_post_meta( $post_id, 'wooco_optional_products', true ) === 'on' ? 'checked' : '' ); ?> />
+                <label
+                    for="wooco_optional_products"></label><?php esc_html_e( 'Buyer can change the quantity of combo products?', 'woo-combo-offers' ); ?>
+            </td>
+        </tr>
+        <tr class="wooco_tr_space wooco_tr_show_if_optional_products">
+            <th><?php esc_html_e( 'Limit of each item', 'woo-combo-offers' ); ?></th>
+            <td>
+                Min <input name="wooco_limit_each_min" type="number" min="0"
+                    value="<?php echo( get_post_meta( $post_id, 'wooco_limit_each_min', true ) ?: '' ); ?>"
+                    style="width: 60px; float: none" /> Max <input name="wooco_limit_each_max" type="number" min="1"
+                    value="<?php echo esc_attr( get_post_meta( $post_id, 'wooco_limit_each_max', true ) ?: '' ); ?>"
+                    style="width: 60px; float: none" />
+                <input id="wooco_limit_each_min_default" name="wooco_limit_each_min_default" type="checkbox"
+                    <?php echo esc_attr( get_post_meta( $post_id, 'wooco_limit_each_min_default', true ) === 'on' ? 'checked' : '' ); ?> />
+                <label
+                    for="wooco_limit_each_min_default"></label><?php esc_html_e( 'Use default quantity as min?', 'woo-combo-offers' ); ?>
+            </td>
+        </tr>
+        <tr class="wooco_tr_space wooco_tr_show_if_optional_products">
+            <th><?php esc_html_e( 'Limit of whole items', 'woo-combo-offers' ); ?></th>
+            <td>
+                Min <input name="wooco_limit_whole_min" type="number" min="1"
+                    value="<?php echo esc_attr( get_post_meta( $post_id, 'wooco_limit_whole_min', true ) ?: '' ); ?>"
+                    style="width: 60px; float: none" /> Max <input name="wooco_limit_whole_max" type="number" min="1"
+                    value="<?php echo esc_attr( get_post_meta( $post_id, 'wooco_limit_whole_max', true ) ?: '' ); ?>"
+                    style="width: 60px; float: none" />
+            </td>
+        </tr>
+        <tr class="wooco_tr_space">
+            <th><?php esc_html_e( 'Shipping fee', 'woo-combo-offers' ); ?></th>
+            <td style="font-style: italic">
+                <select id="wooco_shipping_fee" name="wooco_shipping_fee">
+                    <option value="whole"
+                        <?php echo esc_attr( get_post_meta( $post_id, 'wooco_shipping_fee', true ) === 'whole' ? 'selected' : '' ); ?>>
+                        <?php esc_html_e( 'Apply to the whole combo', 'woo-combo-offers' ); ?></option>
+                    <option value="each"
+                        <?php echo esc_attr( get_post_meta( $post_id, 'wooco_shipping_fee', true ) === 'each' ? 'selected' : '' ); ?>>
+                        <?php esc_html_e( 'Apply to each combo product', 'woo-combo-offers' ); ?></option>
+                </select>
+            </td>
+        </tr>
+        <tr class="wooco_tr_space">
+            <th><?php esc_html_e( 'Manage stock', 'woo-combo-offers' ); ?></th>
+            <td>
+                <input id="wooco_manage_stock" name="wooco_manage_stock" type="checkbox"
+                    <?php echo esc_attr( get_post_meta( $post_id, 'wooco_manage_stock', true ) === 'on' ? 'checked' : '' ); ?> />
+                <label
+                    for="wooco_manage_stock"></label><?php esc_html_e( 'Enable stock management at combo level?', 'woo-combo-offers' ); ?>
+            </td>
+        </tr>
+        <tr class="wooco_tr_space">
+            <th><?php esc_html_e( 'Before text', 'woo-combo-offers' ); ?></th>
+            <td>
+                <div class="w100">
+                    <textarea name="wooco_before_text"
+                        placeholder="<?php esc_html_e( 'The text before combo products', 'woo-combo-offers' ); ?>"><?php echo esc_attr( get_post_meta( $post_id, 'wooco_before_text', true ) ); ?></textarea>
+                </div>
+            </td>
+        </tr>
+        <tr class="wooco_tr_space">
+            <th><?php esc_html_e( 'After text', 'woo-combo-offers' ); ?></th>
+            <td>
+                <div class="w100">
+                    <textarea name="wooco_after_text"
+                        placeholder="<?php esc_html_e( 'The text after combo products', 'woo-combo-offers' ); ?>"><?php echo esc_attr( get_post_meta( $post_id, 'wooco_after_text', true ) ); ?></textarea>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<?php
 				}
 
 				function wooco_product_data_li( $product, $qty = 1, $search = false ) {
@@ -1830,14 +1833,13 @@ if ( ! function_exists( 'wooco_init' ) ) {
 						do_action( 'wooco_before_table', $product );
 						$check_product = apply_filters('wooco_product_active', false);
 						?>
-                        <div class="wooco_products wooco-table wooco-products"
-                             data-discount="<?php echo $product->get_discount(); ?>"
-                             data-fixed-price="<?php echo esc_attr( $product->is_fixed_price() ? 'yes' : 'no' ); ?>"
-                             data-variables="<?php echo esc_attr( $product->has_variables() ? 'yes' : 'no' ); ?>"
-                             data-optional="<?php echo esc_attr( $product->is_optional() ? 'yes' : 'no' ); ?>"
-                             data-min="<?php echo esc_attr( get_post_meta( $product_id, 'wooco_limit_whole_min', true ) ?: 1 ); ?>"
-                             data-max="<?php echo esc_attr( get_post_meta( $product_id, 'wooco_limit_whole_max', true ) ?: '' ); ?>">
-							<?php foreach ( $wooco_items as $wooco_item ) {
+<div class="wooco_products wooco-table wooco-products" data-discount="<?php echo $product->get_discount(); ?>"
+    data-fixed-price="<?php echo esc_attr( $product->is_fixed_price() ? 'yes' : 'no' ); ?>"
+    data-variables="<?php echo esc_attr( $product->has_variables() ? 'yes' : 'no' ); ?>"
+    data-optional="<?php echo esc_attr( $product->is_optional() ? 'yes' : 'no' ); ?>"
+    data-min="<?php echo esc_attr( get_post_meta( $product_id, 'wooco_limit_whole_min', true ) ?: 1 ); ?>"
+    data-max="<?php echo esc_attr( get_post_meta( $product_id, 'wooco_limit_whole_max', true ) ?: '' ); ?>">
+    <?php foreach ( $wooco_items as $wooco_item ) {
 								$wooco_product = wc_get_product( $wooco_item['id'] );
 								if ( ! $wooco_product || ( $count > 2 && !$check_product ) ) {
 									continue;
@@ -1862,20 +1864,20 @@ if ( ! function_exists( 'wooco_init' ) ) {
 									$wooco_product_qty = 0;
 								}
 								?>
-                                <div class="wooco-product"
-                                     data-id="<?php echo esc_attr( $wooco_product->is_type( 'variable' ) ? 0 : $wooco_item['id'] ); ?>"
-                                     data-price="<?php echo esc_attr( wc_get_price_to_display( $wooco_product ) ); ?>"
-                                     data-qty="<?php echo esc_attr( $wooco_product_qty ); ?>">
-									<?php if ( get_option( '_wooco_bundled_thumb', 'yes' ) !== 'no' ) { ?>
-                                        <div class="wooco-thumb">
-                                            <div class="wooco-thumb-ori">
-												<?php echo apply_filters( 'wooco_item_thumbnail', $wooco_product->get_image(), $wooco_product ); ?>
-                                            </div>
-                                            <div class="wooco-thumb-new"></div>
-                                        </div>
-									<?php } ?>
-                                    <div class="wooco-title">
-										<?php
+    <div class="wooco-product"
+        data-id="<?php echo esc_attr( $wooco_product->is_type( 'variable' ) ? 0 : $wooco_item['id'] ); ?>"
+        data-price="<?php echo esc_attr( wc_get_price_to_display( $wooco_product ) ); ?>"
+        data-qty="<?php echo esc_attr( $wooco_product_qty ); ?>">
+        <?php if ( get_option( '_wooco_bundled_thumb', 'yes' ) !== 'no' ) { ?>
+        <div class="wooco-thumb">
+            <div class="wooco-thumb-ori">
+                <?php echo apply_filters( 'wooco_item_thumbnail', $wooco_product->get_image(), $wooco_product ); ?>
+            </div>
+            <div class="wooco-thumb-new"></div>
+        </div>
+        <?php } ?>
+        <div class="wooco-title">
+            <?php
 										do_action( 'wooco_before_item_name', $wooco_product );
 										echo '<div class="wooco-title-inner">';
 										if ( ( get_option( '_wooco_bundled_qty', 'yes' ) === 'yes' ) && ( get_post_meta( $product_id, 'wooco_optional_products', true ) !== 'on' ) ) {
@@ -1908,12 +1910,12 @@ if ( ! function_exists( 'wooco_init' ) ) {
 												echo '<form class="variations_form" data-product_id="' . absint( $wooco_product->get_id() ) . '" data-product_variations="' . $variations_attr . '">';
 												echo '<div class="variations">';
 												foreach ( $attributes as $attribute_name => $options ) { ?>
-                                                    <div class="variation">
-                                                        <div class="label">
-															<?php echo wc_attribute_label( $attribute_name ); ?>
-                                                        </div>
-                                                        <div class="select">
-															<?php
+            <div class="variation">
+                <div class="label">
+                    <?php echo wc_attribute_label( $attribute_name ); ?>
+                </div>
+                <div class="select">
+                    <?php
 															$attr     = 'attribute_' . sanitize_title( $attribute_name );
 															$selected = isset( $_REQUEST[ $attr ] ) ? wc_clean( esc_html( urldecode( $_REQUEST[ $attr ] ) ) ) : $wooco_product->get_variation_default_attribute( $attribute_name );
 															wc_dropdown_variation_attribute_options( array(
@@ -1924,9 +1926,9 @@ if ( ! function_exists( 'wooco_init' ) ) {
 																'show_option_none' => esc_html__( 'Choose', 'woo-combo-offers' ) . ' ' . wc_attribute_label( $attribute_name )
 															) );
 															?>
-                                                        </div>
-                                                    </div>
-												<?php }
+                </div>
+            </div>
+            <?php }
 												echo '<div class="reset">' . apply_filters( 'woocommerce_reset_variations_link', '<a class="reset_variations" href="#">' . esc_html__( 'Clear', 'woo-combo-offers' ) . '</a>' ) . '</div>';
 												echo '</div>';
 												echo '</form>';
@@ -1937,8 +1939,8 @@ if ( ! function_exists( 'wooco_init' ) ) {
 											do_action( 'wooco_after_item_variations', $wooco_product );
 										}
 										?>
-                                    </div>
-									<?php if ( get_post_meta( $product_id, 'wooco_optional_products', true ) === 'on' ) {
+        </div>
+        <?php if ( get_post_meta( $product_id, 'wooco_optional_products', true ) === 'on' ) {
 										if ( (( $wooco_product->get_backorders() === 'no' ) && ( $wooco_product->get_stock_status() !== 'onbackorder' ) && is_int( $wooco_product->get_stock_quantity() ) && ( $wooco_product->get_stock_quantity() < $wooco_product_qty_max )) ) {
 											if($wooco_product->get_manage_stock()) {
 												$wooco_product_qty_max = $wooco_product->get_stock_quantity();
@@ -1954,24 +1956,22 @@ if ( ! function_exists( 'wooco_init' ) ) {
 
 											$step = apply_filters( 'woocommerce_quantity_input_step', 1, $wooco_product );
 											?>
-                                            <div class="wooco-qty">
-                                                <input type="number" class="input-text qty text"
-                                                       value="<?php echo esc_attr( $wooco_product_qty ); ?>"
-                                                       min="<?php echo esc_attr( $wooco_product_qty_min ); ?>"
-                                                       max="<?php echo esc_attr( $wooco_product_qty_max ); ?>"
-                                                       step="<?php echo esc_attr( $step ); ?>"/>
-                                            </div>
-											<?php
+        <div class="wooco-qty">
+            <input type="number" class="input-text qty text" value="<?php echo esc_attr( $wooco_product_qty ); ?>"
+                min="<?php echo esc_attr( $wooco_product_qty_min ); ?>"
+                max="<?php echo esc_attr( $wooco_product_qty_max ); ?>" step="<?php echo esc_attr( $step ); ?>" />
+        </div>
+        <?php
 										} else { ?>
-                                            <div class="wooco-qty">
-                                                <input type="number" class="input-text qty text" value="0" disabled/>
-                                            </div>
-										<?php }
+        <div class="wooco-qty">
+            <input type="number" class="input-text qty text" value="0" disabled />
+        </div>
+        <?php }
 									} ?>
-									<?php if ( get_option( '_wooco_bundled_price', 'html' ) !== 'no' ) { ?>
-                                        <div class="wooco-price">
-                                            <div class="wooco-price-ori">
-												<?php
+        <?php if ( get_option( '_wooco_bundled_price', 'html' ) !== 'no' ) { ?>
+        <div class="wooco-price">
+            <div class="wooco-price-ori">
+                <?php
 												$wooco_price = '';
 												switch ( get_option( '_wooco_bundled_price', 'html' ) ) {
 													case 'price':
@@ -1986,17 +1986,17 @@ if ( ! function_exists( 'wooco_init' ) ) {
 												}
 												echo apply_filters( 'wooco_item_price', $wooco_price, $wooco_product );
 												?>
-                                            </div>
-                                            <div class="wooco-price-new"></div>
-											<?php do_action( 'wooco_after_item_price', $wooco_product ); ?>
-                                        </div>
-									<?php } ?>
-                                </div>
-								<?php
+            </div>
+            <div class="wooco-price-new"></div>
+            <?php do_action( 'wooco_after_item_price', $wooco_product ); ?>
+        </div>
+        <?php } ?>
+    </div>
+    <?php
 								$count ++;
 							} ?>
-                        </div>
-						<?php
+</div>
+<?php
 						if ( ! $product->is_fixed_price() && ( $product->has_variables() || $product->is_optional() ) ) {
 							echo '<div class="wooco_total wooco-total wooco-text"></div>';
 						}
@@ -2050,20 +2050,20 @@ if ( ! function_exists( 'wooco_init' ) ) {
 if ( ! function_exists( 'wooco_notice_wc' ) ) {
 	function wooco_notice_wc() {
 		?>
-        <div class="error">
-            <p><strong>Woocommerce Combo Offers</strong> requires WooCommerce version 3.0.0 or greater.</p>
-        </div>
-		<?php
+<div class="error">
+    <p><strong>Woocommerce Combo Offers</strong> requires WooCommerce version 3.0.0 or greater.</p>
+</div>
+<?php
 	}
 }
 
 if ( ! function_exists( 'wooco_notice_premium' ) ) {
 	function wooco_notice_premium() {
 		?>
-        <div class="error">
-            <p>Seems you're using both free and premium version of <strong>Woocommerce Combo Offers</strong>. Please
-                deactivate the free version when using the premium version.</p>
-        </div>
-		<?php
+<div class="error">
+    <p>Seems you're using both free and premium version of <strong>Woocommerce Combo Offers</strong>. Please
+        deactivate the free version when using the premium version.</p>
+</div>
+<?php
 	}
 }
