@@ -1,0 +1,115 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"X-Loco-Version: 2.2.2; wp-5.1.1\n"
+"Project-Id-Version: Caramel\n"
+"Language: de\n"
+
+#: woo-combo-offers.php:591
+msgid "Get Premium"
+msgstr ""
+
+#. Author URI of the plugin
+#: 
+msgid "https://www.wooextend.com"
+msgstr ""
+
+#. URI of the plugin
+#: 
+msgid "https://www.wooextend.com/"
+msgstr ""
+
+#. Name of the plugin
+#: 
+msgid "WooCommerce Combo Offers"
+msgstr ""
+
+#. Description of the plugin
+#: 
+msgid "WooCommerce Combo Offers enables administrator to offer combo deals on their product!"
+msgstr ""
+
+#. Author of the plugin
+#: 
+msgid "WooExtend"
+msgstr ""
+
+#: 
+msgid "Add to cart"
+msgstr "In den Warenkorb"
+
+#: 
+msgid "Products on offer"
+msgstr "Angebotene Produkte"
+
+#: 
+msgid "Search"
+msgstr "Suchen"
+
+#: 
+msgid "Selected"
+msgstr "Ausgewählt"
+
+#: 
+msgid "Regular price"
+msgstr "Regulärer Preis"
+
+#: 
+msgid "Sale price"
+msgstr "Sonderpreis"
+
+#: 
+msgid "Optional products"
+msgstr "Optionale Produkte"
+
+#: 
+msgid "Buyer can change the quantity of bundled products?"
+msgstr "Kann der Käufer die Menge der gebündelten Produkte ändern?"
+
+#: 
+msgid "Shipping fee"
+msgstr "Versandkosten"
+
+#: 
+msgid "Before text"
+msgstr "Vor dem Text"
+
+#: 
+msgid "After text"
+msgstr "Nach dem Text"
+
+#: 
+msgid "Type any keyword to search"
+msgstr "Geben Sie ein beliebiges Stichwort ein, um zu suchen"
+
+#: 
+msgid "WP Combo Offers"
+msgstr "WP Combo-Angebote"
+
+#: 
+msgid "Disable auto calculate Regular price? If yes, click here to set Regular price"
+msgstr "Automatische Berechnung des regulären Preises deaktivieren? Wenn ja, klicken Sie hier, um den regulären Preis festzulegen."
+
+#: 
+msgid "% of Regular price or click here to set Sale price"
+msgstr "Prozent des regulären Preises oder hier klicken, um den Verkaufspreis festzulegen"
+
+#: 
+msgid "click here to set the Shipping class"
+msgstr "Klicken Sie hier, um die Versandklasse festzulegen."
+
+#: 
+msgid "The text before combo products"
+msgstr "Der Text vor den Kombiprodukten"
+
+#: 
+msgid "The text after combo products"
+msgstr "Der Text nach den Kombiprodukten"
+
+#: 
+msgid "Select options"
+msgstr "Optionen auswählen"
+

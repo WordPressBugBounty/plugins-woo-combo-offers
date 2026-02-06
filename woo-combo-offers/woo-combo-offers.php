@@ -3,19 +3,19 @@
  * Plugin Name: Combo Offers WooCommerce
  * Plugin URI: https://quanticedgesolutions.com/?utm-source=free-plugin&utm-medium=wooextend
  * Description: Combo Offers Woocommerce enables administrator to offer combo deals on their product!
- * Version: 4.2
+ * Version: 4.4
  * Author: QuanticEdge
  * Author URI: https://quanticedgesolutions.com/?utm-source=free-plugin&utm-medium=wooextend
  * Text Domain: woo-combo-offers
  * Domain Path: /languages/
  * WC requires at least: 3.0
- * Tested up to: 6.8.2
- * WC tested up to: 8.4.2
+ * Tested up to: 6.9
+ * WC tested up to: 10.4.3
 */
 
 defined( 'ABSPATH' ) || exit;
 
-! defined( 'WOOCO_VERSION' ) && define( 'WOOCO_VERSION', '4.2' );
+! defined( 'WOOCO_VERSION' ) && define( 'WOOCO_VERSION', '4.4' );
 ! defined( 'WOOCO_URI' ) && define( 'WOOCO_URI', plugin_dir_url( __FILE__ ) );
 ! defined( 'WOOCO_REVIEWS' ) && define( 'WOOCO_REVIEWS', 'https://wordpress.org/support/plugin/woo-combo-offers/reviews/?filter=5' );
 ! defined( 'WOOCO_CHANGELOG' ) && define( 'WOOCO_CHANGELOG', 'https://wordpress.org/plugins/woo-combo-offers/#developers' );
@@ -303,8 +303,6 @@ if ( ! function_exists( 'wooco_init' ) ) {
 					// Compatibility for latest woocommerce tables
 					add_action('before_woocommerce_init', array($this, 'wooco_declare_wc_features_support'));
 
-					add_shortcode('wooco_list_products', array($this, 'wooco_list_products'), 10, 1);
-
 					// Enqueue frontend scripts
 					add_action( 'wp_enqueue_scripts', array( $this, 'wooco_wp_enqueue_scripts' ), 99 );
 
@@ -526,41 +524,6 @@ if ( ! function_exists( 'wooco_init' ) ) {
 							}
 						}
 					}					
-				}
-
-				function wooco_list_products( $atts ) {
-
-					global $wpdb;
-
-					$args = array(
-					    'post_type' => 'product',
-					    'post_status' => 'publish',
-					    'posts_per_page' => -1,
-					    'tax_query' => array(
-					        array(
-					            'taxonomy' => 'product_type',
-					            'field' => 'slug',
-					            'terms' => 'wooco'
-					        )
-					    ),
-					    'fields'	=>	'ids'
-					);
-					$the_query = new WP_Query( $args );
-
-					if(isset($atts['columns']) &&!empty($atts['columns'])) {
-						$columns = $atts['columns'];
-					} else {
-						$columns = 3;
-					}
-					if(isset($the_query->posts) && !empty($the_query->posts) && is_array($the_query->posts)) {
-
-						$str_ids = implode(',', $the_query->posts);
-						ob_start();
-
-						echo do_shortcode("[products ids=" . $str_ids . " columns=" . $columns . "]");
-						return ob_get_clean();
-					}
-					return '';
 				}
 
 				function wooco_wp() {
@@ -1824,6 +1787,8 @@ if ( ! function_exists( 'wooco_init' ) ) {
 				function wooco_show_items() {
 					global $product;
 					$count      = 0;
+					
+					$main_wooco_product = $product;
 					$product_id = $product->get_id();
 					if ( $wooco_items = $product->get_items() ) {
 						echo '<div class="wooco_wrap wooco-wrap">';
@@ -1863,21 +1828,20 @@ if ( ! function_exists( 'wooco_init' ) ) {
 								if ( ! $wooco_product->is_in_stock() || ! $wooco_product->has_enough_stock( $wooco_product_qty ) ) {
 									$wooco_product_qty = 0;
 								}
-								?>
-    <div class="wooco-product"
-        data-id="<?php echo esc_attr( $wooco_product->is_type( 'variable' ) ? 0 : $wooco_item['id'] ); ?>"
-        data-price="<?php echo esc_attr( wc_get_price_to_display( $wooco_product ) ); ?>"
-        data-qty="<?php echo esc_attr( $wooco_product_qty ); ?>">
-        <?php if ( get_option( '_wooco_bundled_thumb', 'yes' ) !== 'no' ) { ?>
-        <div class="wooco-thumb">
-            <div class="wooco-thumb-ori">
-                <?php echo apply_filters( 'wooco_item_thumbnail', $wooco_product->get_image(), $wooco_product ); ?>
-            </div>
-            <div class="wooco-thumb-new"></div>
-        </div>
-        <?php } ?>
-        <div class="wooco-title">
-            <?php
+								?><div class="wooco-product"
+							        data-id="<?php echo esc_attr( $wooco_product->is_type( 'variable' ) ? 0 : $wooco_item['id'] ); ?>"
+							        data-price="<?php echo esc_attr( wc_get_price_to_display( $wooco_product ) ); ?>"
+							        data-qty="<?php echo esc_attr( $wooco_product_qty ); ?>">
+							        <?php if ( get_option( '_wooco_bundled_thumb', 'yes' ) !== 'no' ) { ?>
+							        <div class="wooco-thumb">
+							            <div class="wooco-thumb-ori">
+							                <?php echo apply_filters( 'wooco_item_thumbnail', $wooco_product->get_image(), $wooco_product ); ?>
+							            </div>
+							            <div class="wooco-thumb-new"></div>
+							        </div>
+							        <?php } ?>
+							        <div class="wooco-title">
+							            <?php
 										do_action( 'wooco_before_item_name', $wooco_product );
 										echo '<div class="wooco-title-inner">';
 										if ( ( get_option( '_wooco_bundled_qty', 'yes' ) === 'yes' ) && ( get_post_meta( $product_id, 'wooco_optional_products', true ) !== 'on' ) ) {
@@ -1986,21 +1950,20 @@ if ( ! function_exists( 'wooco_init' ) ) {
 												}
 												echo apply_filters( 'wooco_item_price', $wooco_price, $wooco_product );
 												?>
-            </div>
-            <div class="wooco-price-new"></div>
-            <?php do_action( 'wooco_after_item_price', $wooco_product ); ?>
-        </div>
-        <?php } ?>
-    </div>
-    <?php
-								$count ++;
-							} ?>
-</div>
-<?php
-						if ( ! $product->is_fixed_price() && ( $product->has_variables() || $product->is_optional() ) ) {
+						            </div>
+						            <div class="wooco-price-new"></div>
+						            <?php do_action( 'wooco_after_item_price', $wooco_product ); ?>
+						        </div>
+						        <?php } ?>
+						    </div>
+						    <?php
+							$count ++;
+						} ?>
+						</div><?php
+						if ( ! $main_wooco_product->is_fixed_price() && ( $main_wooco_product->has_variables() || $main_wooco_product->is_optional() ) ) {
 							echo '<div class="wooco_total wooco-total wooco-text"></div>';
 						}
-						do_action( 'wooco_after_table', $product );
+						do_action( 'wooco_after_table', $main_wooco_product );
 						if ( $wooco_after_text = apply_filters( 'wooco_after_text', get_post_meta( $product_id, 'wooco_after_text', true ), $product_id ) ) {
 							echo '<div class="wooco_after_text wooco-after-text wooco-text">' . do_shortcode(html_entity_decode( $wooco_after_text )) . '</div>';
 						}

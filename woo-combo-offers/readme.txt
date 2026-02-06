@@ -3,7 +3,7 @@ Contributors: vidishp, quanticedge
 Donate link: https://ko-fi.com/vidish
 Tags: woocommerce, woo, combo products, combo offer, combo, product, bundle, bundles, product bundle, product bundles
 Requires at least: 4.0
-Tested up to: 6.8.2
+Tested up to: 6.9
 Stable tag: 4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -55,6 +55,7 @@ Combo Offers Woocommerce can be used in these different languages thanks to the 
 <ul>
 <li>Turkish - <a href="https://twitter.com/OnderGokmen">Önder Gökmen</a></li>
 <li>Portuguese - Brazil - Alessandro Dias</li>
+<li>German - OOPS!Design</li>
 </ul>
 
 = Need support? =
@@ -90,6 +91,12 @@ You can purchase our Premium version to get this feature..
 5. Done! click Save and Go to front end
 
 == Changelog ==
+
+= 4.4 =
+* Fix for sometimes variable products showing fatal error
+
+= 4.3 =
+* Removed shortcode [wooco_list_products]
 
 = 4.2 =
 * Fix issue when one of the child item is out of stock, whole item is not purchaseable.
