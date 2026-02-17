@@ -3,8 +3,8 @@ Contributors: vidishp, quanticedge
 Donate link: https://ko-fi.com/vidish
 Tags: woocommerce, woo, combo products, combo offer, combo, product, bundle, bundles, product bundle, product bundles
 Requires at least: 4.0
-Tested up to: 6.9
-Stable tag: 4.0
+Tested up to: 6.9.1
+Stable tag: 4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,9 @@ You can purchase our Premium version to get this feature..
 5. Done! click Save and Go to front end
 
 == Changelog ==
+
+= 4.5 =
+* Fix issue for release not reflecting
 
 = 4.4 =
 * Fix for sometimes variable products showing fatal error

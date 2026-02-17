@@ -3,19 +3,19 @@
  * Plugin Name: Combo Offers WooCommerce
  * Plugin URI: https://quanticedgesolutions.com/?utm-source=free-plugin&utm-medium=wooextend
  * Description: Combo Offers Woocommerce enables administrator to offer combo deals on their product!
- * Version: 4.4
+ * Version: 4.5
  * Author: QuanticEdge
  * Author URI: https://quanticedgesolutions.com/?utm-source=free-plugin&utm-medium=wooextend
  * Text Domain: woo-combo-offers
  * Domain Path: /languages/
  * WC requires at least: 3.0
- * Tested up to: 6.9
+ * Tested up to: 6.9.1
  * WC tested up to: 10.4.3
 */
 
 defined( 'ABSPATH' ) || exit;
 
-! defined( 'WOOCO_VERSION' ) && define( 'WOOCO_VERSION', '4.4' );
+! defined( 'WOOCO_VERSION' ) && define( 'WOOCO_VERSION', '4.5' );
 ! defined( 'WOOCO_URI' ) && define( 'WOOCO_URI', plugin_dir_url( __FILE__ ) );
 ! defined( 'WOOCO_REVIEWS' ) && define( 'WOOCO_REVIEWS', 'https://wordpress.org/support/plugin/woo-combo-offers/reviews/?filter=5' );
 ! defined( 'WOOCO_CHANGELOG' ) && define( 'WOOCO_CHANGELOG', 'https://wordpress.org/plugins/woo-combo-offers/#developers' );
